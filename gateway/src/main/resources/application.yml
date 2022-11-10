@@ -1,0 +1,59 @@
+server:
+  port: 8888
+  address: localhost
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      #      discovery:
+      #        locator:
+      #自动发现并路由到微服务
+      #与服务发现Eureka Server进行结合，通过Service Id转发到具体的服务实例
+      #          enabled: true
+      #小写ServiceId
+      #          lower-case-service-id: true
+      routes:
+        - id: service
+          uri: lb://service
+          predicates:
+            - Path=/service/**
+          filters:
+            - StripPrefix=1
+            - name: Retry
+              args:
+                retries: 1
+                series:
+                  - SERVER_ERROR
+                methods:
+                  - GET
+                  - POST
+                exceptions:
+                  - java.io.IOException
+        - id: logic
+          uri: lb://logic
+          predicates:
+            - Path=/logic/**
+          filters:
+            - StripPrefix=1
+            - name: Retry
+              args:
+                retries: 1
+                series:
+                  - SERVER_ERROR
+                methods:
+                  - GET
+                  - POST
+                exceptions:
+                  - java.io.IOException
+
+eureka:
+  client:
+    service-url:
+      #注册中心的地址，要对应eureka-server的配置
+      defaultZone: http://localhost:9999/eureka/

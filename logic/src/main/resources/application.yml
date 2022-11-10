@@ -1,0 +1,16 @@
+server:
+  port: 6666
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: logic
+
+Eureka:
+  client:
+    service-url:
+      #注册中心的地址，要对应eureka-server的配置
+      defaultZone: http://localhost:9999/eureka/
