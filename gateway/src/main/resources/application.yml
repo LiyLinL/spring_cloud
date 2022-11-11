@@ -22,7 +22,7 @@ spring:
         - id: service
           uri: lb://service
           predicates:
-            - Path=/service/**
+            - Path=/cloudApi/**
           filters:
             - StripPrefix=1
             - name: Retry
@@ -38,7 +38,7 @@ spring:
         - id: logic
           uri: lb://logic
           predicates:
-            - Path=/logic/**
+            - Path=/logicApi/**
           filters:
             - StripPrefix=1
             - name: Retry
