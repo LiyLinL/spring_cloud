@@ -24,6 +24,7 @@ spring:
           predicates:
             - Path=/cloudApi/**
           filters:
+            #攔截網址
             - StripPrefix=1
             - name: Retry
               args:
